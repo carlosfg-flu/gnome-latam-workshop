@@ -6,14 +6,15 @@ cpp_compiler = meson.get_compiler('cpp')
 pkg_version = meson.project_version()
 api_version = '1.0'
 
-gst_dep = dependency('gstreamer-1.0', version : '>=1.19',
+gst_dep = dependency('gstreamer-1.0', version : '>=1.18',
     required : true, fallback : ['gstreamer', 'gst_dep'])
-gstbase_dep = dependency('gstreamer-base-1.0', version : '>=1.19',
+gstbase_dep = dependency('gstreamer-base-1.0', version : '>=1.18',
   fallback : ['gstreamer', 'gst_base_dep'])
-opencv_dep = dependency('opencv', version : '>= 3.0.0', required: false)
+opencv_dep = dependency('opencv', version : '>= 3', required: false)
 if not opencv_dep.found()
-  opencv_dep = dependency('opencv4', version : '>= 4.0.0', required: true)
+  opencv_dep = dependency('opencv4', version : '>= 4.0.0', method: 'pkg-config', required: true)
 endif
+opencv_dep = opencv_dep.partial_dependency(compile_args: true)
 gstopencv_dep = cpp_compiler.find_library('gstopencv-1.0', required: true)
 
 plugin_c_args = ['-DHAVE_CONFIG_H']

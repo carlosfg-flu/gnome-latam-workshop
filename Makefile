@@ -33,13 +33,23 @@ container_%: .container_built
 		$(container_tag) \
 		make $*
 
+container_bash: .container_built
+	docker run \
+		--rm \
+		-it \
+		--user $(shell id -u):$(shell id -g) \
+		--volume "$(PWD)":"/tmp/ws" \
+		--workdir "/tmp/ws" \
+		$(container_tag) \
+		bash
+
 .container_built: Dockerfile
 	docker build ./ --tag "$(container_tag)" && touch "$@"
 
 clean:
 	-rm -fr "$(builddir)"
 	-rm .container_built
-	-rm "$(prefix)"
+	-rm -fr "$(prefix)"
 
 mrproper: clean
 	-docker image rm "$(container_tag)"

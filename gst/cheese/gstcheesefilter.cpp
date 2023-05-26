@@ -78,8 +78,6 @@ static GstStaticPadTemplate src_template = GST_STATIC_PAD_TEMPLATE ("src",
 
 #define gst_cheesefilter_parent_class parent_class
 G_DEFINE_TYPE (Gstcheesefilter, gst_cheesefilter, GST_TYPE_OPENCV_VIDEO_FILTER);
-GST_ELEMENT_REGISTER_DEFINE (cheesefilter, "cheesefilter", GST_RANK_NONE,
-    GST_TYPE_CHEESE_FILTER);
 
 static void gst_cheesefilter_set_property (GObject * object,
     guint prop_id, const GValue * value, GParamSpec * pspec);
@@ -214,7 +212,8 @@ gst_cheesefilter_transform_ip (GstOpencvVideoFilter * base, GstBuffer * outbuf,
 static gboolean
 cheese_init (GstPlugin * plugin)
 {
-  return GST_ELEMENT_REGISTER (cheesefilter, plugin);
+  return gst_element_register (
+      plugin, "cheesefilter", GST_RANK_NONE, GST_TYPE_CHEESE_FILTER);
 }
 
 /* gstreamer looks for this structure to register cheese_filters
